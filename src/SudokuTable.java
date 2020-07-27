@@ -1,15 +1,16 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class SudokuTable {
-    private ArrayList<Cell> sudokuCells;
+    private final ArrayList<Cell> sudokuCells;
 
     public SudokuTable() {
         sudokuCells = new ArrayList<>();
         for (int i = 0; i < 81; i++) {
             sudokuCells.add(new Cell(0, i));
         }
+    }
 
+    public void putKnownValues() {
         sudokuCells.set(0, new Cell(5, 0));
         sudokuCells.set(1, new Cell(3, 1));
         sudokuCells.set(4, new Cell(7, 4));
@@ -82,23 +83,23 @@ public class SudokuTable {
         System.out.println("|-------|-------|-------|");
     }
 
-    public Boolean tryInsertValues() {
+    public Boolean isSolved() {
         int i = 0;
         do {
-            System.out.println(" // i=" + i);
-            if (sudokuCells.get(i).isConfirmed()) {
+            System.out.println("i = " + i);
+            if (sudokuCells.get(i).isKnownValue()) {
                 i++;
             } else {
                 do {
                     sudokuCells.get(i).setValue(sudokuCells.get(i).getValue() + 1);
-                } while (!isValuePossible(sudokuCells.get(i)));
+                } while (!isValuePossibleEveryway(sudokuCells.get(i)));
 
                 if (sudokuCells.get(i).getValue() < 10) {
                     i++;
                 } else {
                     sudokuCells.get(i).setValue(0);
                     i--;
-                    if (sudokuCells.get(i).isConfirmed()) {
+                    while (sudokuCells.get(i).isKnownValue()) {
                         i--;
                     }
                     if (i < 0) {
@@ -111,49 +112,46 @@ public class SudokuTable {
         return true;
     }
 
-    private Boolean isValuePossible(Cell c) {
-        //return isPossibleInRow(c) && isPossibleInColumn(c) && isPossibleInSquare(c);
-        return isPossibleInRow(c);
+    private Boolean isValuePossibleEveryway(Cell c) {
+        return isValuePossibleInRow(c) && isValuePossibleInColumn(c) && isValuePossibleInSquare(c);
     }
 
-    private Boolean isPossibleInRow(Cell c) {
+    private Boolean isValuePossibleInRow(Cell c) {
         ArrayList<Cell> cellsInRow = new ArrayList<>();
-        for (Cell tc : sudokuCells) {
-            if (tc.getRowNumber() == c.getRowNumber()) {
-                cellsInRow.add(tc);
+        for (Cell tempC : sudokuCells) {
+            if (tempC.getRowNumber() == c.getRowNumber()) {
+                cellsInRow.add(tempC);
             }
         }
         cellsInRow.remove(c);
-        /*System.out.println("testowana c=" + c.getValue() + ", "); for (Cell cc : cellsInRow) { System.out.print(cc.getValue() + ", "); }*/
-
         return isPossibleToPutValue(cellsInRow, c.getValue());
     }
 
-    private Boolean isPossibleInColumn(Cell c) {
+    private Boolean isValuePossibleInColumn(Cell c) {
         ArrayList<Cell> cellsInColumn = new ArrayList<>();
-        for (Cell tc : sudokuCells) {
-            if (tc.getColumnNumber() == c.getColumnNumber()) {
-                cellsInColumn.add(c);
+        for (Cell tempC : sudokuCells) {
+            if (tempC.getColumnNumber() == c.getColumnNumber()) {
+                cellsInColumn.add(tempC);
             }
         }
         cellsInColumn.remove(c);
         return isPossibleToPutValue(cellsInColumn, c.getValue());
     }
 
-    private Boolean isPossibleInSquare(Cell c) {
+    private Boolean isValuePossibleInSquare(Cell c) {
         ArrayList<Cell> cellsInSquare = new ArrayList<>();
-        for (Cell tc : sudokuCells) {
-            if (tc.getSquareNumber() == c.getSquareNumber()) {
-                cellsInSquare.add(c);
+        for (Cell tempC : sudokuCells) {
+            if (tempC.getSquareNumber() == c.getSquareNumber()) {
+                cellsInSquare.add(tempC);
             }
         }
         cellsInSquare.remove(c);
         return isPossibleToPutValue(cellsInSquare, c.getValue());
     }
 
-    private Boolean isPossibleToPutValue(ArrayList<Cell> cs, int j) {
-        for (Cell tc : cs) {
-            if (tc.getValue() == j) {
+    private Boolean isPossibleToPutValue(ArrayList<Cell> cs, int value) {
+        for (Cell tempCs : cs) {
+            if (tempCs.getValue() == value) {
                 return false;
             }
         }
