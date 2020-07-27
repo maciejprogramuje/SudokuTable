@@ -10,45 +10,10 @@ public class SudokuTable {
         }
     }
 
-    public void putKnownValues() {
-        sudokuCells.set(0, new Cell(5, 0));
-        sudokuCells.set(1, new Cell(3, 1));
-        sudokuCells.set(4, new Cell(7, 4));
-
-        sudokuCells.set(9, new Cell(6, 9));
-        sudokuCells.set(12, new Cell(1, 12));
-        sudokuCells.set(13, new Cell(9, 13));
-        sudokuCells.set(14, new Cell(5, 14));
-
-        sudokuCells.set(19, new Cell(9, 19));
-        sudokuCells.set(20, new Cell(8, 20));
-        sudokuCells.set(25, new Cell(6, 25));
-
-        sudokuCells.set(27, new Cell(8, 27));
-        sudokuCells.set(31, new Cell(6, 31));
-        sudokuCells.set(35, new Cell(3, 35));
-
-        sudokuCells.set(36, new Cell(4, 36));
-        sudokuCells.set(39, new Cell(8, 39));
-        sudokuCells.set(41, new Cell(3, 41));
-        sudokuCells.set(44, new Cell(1, 44));
-
-        sudokuCells.set(45, new Cell(7, 45));
-        sudokuCells.set(49, new Cell(2, 49));
-        sudokuCells.set(53, new Cell(6, 53));
-
-        sudokuCells.set(55, new Cell(6, 55));
-        sudokuCells.set(60, new Cell(2, 60));
-        sudokuCells.set(61, new Cell(8, 61));
-
-        sudokuCells.set(66, new Cell(4, 66));
-        sudokuCells.set(67, new Cell(1, 67));
-        sudokuCells.set(68, new Cell(9, 68));
-        sudokuCells.set(71, new Cell(5, 71));
-
-        sudokuCells.set(76, new Cell(8, 76));
-        sudokuCells.set(79, new Cell(7, 79));
-        sudokuCells.set(80, new Cell(9, 80));
+    public void putKnownValues(ArrayList<Cell> knownValues) {
+        for(Cell c : knownValues) {
+            sudokuCells.set(c.getIndex(), new Cell(c.getValue(), c.getIndex()));
+        }
     }
 
     /*public void printSudoku() {
@@ -92,7 +57,7 @@ public class SudokuTable {
             } else {
                 do {
                     sudokuCells.get(i).setValue(sudokuCells.get(i).getValue() + 1);
-                } while (!isValuePossibleEveryway(sudokuCells.get(i)));
+                } while (!isValuePossible(sudokuCells.get(i)));
 
                 if (sudokuCells.get(i).getValue() < 10) {
                     i++;
@@ -112,46 +77,19 @@ public class SudokuTable {
         return true;
     }
 
-    private Boolean isValuePossibleEveryway(Cell c) {
-        return isValuePossibleInRow(c) && isValuePossibleInColumn(c) && isValuePossibleInSquare(c);
-    }
-
-    private Boolean isValuePossibleInRow(Cell c) {
-        ArrayList<Cell> cellsInRow = new ArrayList<>();
+    private Boolean isValuePossible(Cell c) {
+        ArrayList<Cell> cells = new ArrayList<>();
         for (Cell tempC : sudokuCells) {
-            if (tempC.getRowNumber() == c.getRowNumber()) {
-                cellsInRow.add(tempC);
+            if (tempC.getRowNumber() == c.getRowNumber()
+                    || tempC.getColumnNumber() == c.getColumnNumber()
+                    || tempC.getSquareNumber() == c.getSquareNumber()) {
+                cells.add(tempC);
             }
         }
-        cellsInRow.remove(c);
-        return isPossibleToPutValue(cellsInRow, c.getValue());
-    }
+        cells.remove(c);
 
-    private Boolean isValuePossibleInColumn(Cell c) {
-        ArrayList<Cell> cellsInColumn = new ArrayList<>();
-        for (Cell tempC : sudokuCells) {
-            if (tempC.getColumnNumber() == c.getColumnNumber()) {
-                cellsInColumn.add(tempC);
-            }
-        }
-        cellsInColumn.remove(c);
-        return isPossibleToPutValue(cellsInColumn, c.getValue());
-    }
-
-    private Boolean isValuePossibleInSquare(Cell c) {
-        ArrayList<Cell> cellsInSquare = new ArrayList<>();
-        for (Cell tempC : sudokuCells) {
-            if (tempC.getSquareNumber() == c.getSquareNumber()) {
-                cellsInSquare.add(tempC);
-            }
-        }
-        cellsInSquare.remove(c);
-        return isPossibleToPutValue(cellsInSquare, c.getValue());
-    }
-
-    private Boolean isPossibleToPutValue(ArrayList<Cell> cs, int value) {
-        for (Cell tempCs : cs) {
-            if (tempCs.getValue() == value) {
+        for (Cell tempCs : cells) {
+            if (tempCs.getValue() == c.getValue()) {
                 return false;
             }
         }

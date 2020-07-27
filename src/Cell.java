@@ -4,6 +4,7 @@ public class Cell {
     private int rowNumber;
     private int squareNumber;
     private boolean isKnownValue;
+    private int index;
 
     public Cell(int value, int index) {
         this.value = value;
@@ -11,6 +12,7 @@ public class Cell {
         this.columnNumber = index % 9 + 1;
         this.squareNumber = setSquareNumber();
         this.isKnownValue = value > 0;
+        this.index = index;
     }
 
     private int setSquareNumber() {
@@ -79,5 +81,13 @@ public class Cell {
 
     public void setKnownValue(boolean knownValue) {
         isKnownValue = knownValue;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 }
