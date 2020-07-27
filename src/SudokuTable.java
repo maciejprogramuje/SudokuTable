@@ -124,11 +124,7 @@ public class SudokuTable {
             }
         }
         cellsInRow.remove(c);
-
-        /*System.out.println("testowana c=" + c.getValue() + ", ");
-        for (Cell cc : cellsInRow) {
-            System.out.print(cc.getValue() + ", ");
-        }*/
+        /*System.out.println("testowana c=" + c.getValue() + ", "); for (Cell cc : cellsInRow) { System.out.print(cc.getValue() + ", "); }*/
 
         return isPossibleToPutValue(cellsInRow, c.getValue());
     }
@@ -136,7 +132,7 @@ public class SudokuTable {
     private Boolean isPossibleInColumn(Cell c) {
         ArrayList<Cell> cellsInColumn = new ArrayList<>();
         for (Cell tc : sudokuCells) {
-            if (c.getColumnNumber() == c.getColumnNumber()) {
+            if (tc.getColumnNumber() == c.getColumnNumber()) {
                 cellsInColumn.add(c);
             }
         }
@@ -147,7 +143,7 @@ public class SudokuTable {
     private Boolean isPossibleInSquare(Cell c) {
         ArrayList<Cell> cellsInSquare = new ArrayList<>();
         for (Cell tc : sudokuCells) {
-            if (c.getSquareNumber() == c.getSquareNumber()) {
+            if (tc.getSquareNumber() == c.getSquareNumber()) {
                 cellsInSquare.add(c);
             }
         }
