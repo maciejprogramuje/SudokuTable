@@ -6,13 +6,16 @@ public class Main {
         sudokuTable.putKnownValues(setKnownValues());
 
         sudokuTable.printSudoku();
-        System.out.println("-- Start --");
+        System.out.println("--------- Start ---------");
 
         if (sudokuTable.isSolved()) {
-            System.out.println("-- Rozwiazane --");
+            System.out.println("|-----------------------|");
+            System.out.println("|----- Rozwiazanie -----|");
         } else {
-            System.out.println("-- Brak rozwiazania --");
+            System.out.println("|-- Brak rozwiazania! --|");
         }
+        System.out.println("|-----------------------|");
+
         sudokuTable.printSudoku();
     }
 
